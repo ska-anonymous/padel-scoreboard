@@ -1,17 +1,19 @@
 react-app/
     .gitignore
     eslint.config.js
+    folder_structure1.txt
     index.html
     package-lock.json
     package.json
     README.md
+    tree.py
     vite.config.js
     dist/
         index.html
         vite.svg
         assets/
             index-BS3BN3-N.css
-            index-DUqPpXBO.js
+            index-DPMXIVej.js
     public/
         vite.svg
     src/
@@ -25,7 +27,7 @@ react-app/
                 AdminControls.jsx
                 GameStartForm.jsx
             app/
-                WebSocketProvider.jsx
+                TimerManager.jsx
             game/
                 Scoreboard.jsx
         features/
@@ -36,17 +38,29 @@ react-app/
                 socketEvents.js
                 socketListener.js
         hooks/
-            useGameEngine.js
+            useGame.js
+            useTimerDisplay.js
+            useTTS.js
         layouts/
             AppLayout.jsx
+        lib/
+            syncStatus.js
+            persistence/
+                gamePersistence.js
         pages/
             AdminPage.jsx
             QRCodePage.jsx
             ScoreboardPage.jsx
+        providers/
+            GameAnnouncerProvider.jsx
+            GamePersistenceProvider.jsx
+            WebSocketProvider.jsx
         routes/
             AppRouter.jsx
             ScoreboardGuard.jsx
         services/
+            gameEngine.js
             socketService.js
+            ttsService.js
         store/
             store.js

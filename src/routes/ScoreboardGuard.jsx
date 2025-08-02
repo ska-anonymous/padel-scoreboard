@@ -1,10 +1,10 @@
 import React from 'react'
 import { Navigate } from 'react-router-dom'
-import { useGameEngine } from '../hooks/useGameEngine'
+import { useGame } from '../hooks/useGame'
 import ScoreboardPage from '../pages/ScoreboardPage'
 
 const ScoreboardGuard = () => {
-    const { gameStarted } = useGameEngine()
+    const { gameStarted } = useGame()
 
     if (!gameStarted) {
         return <Navigate to="/qr" replace />

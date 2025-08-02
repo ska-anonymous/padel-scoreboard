@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { saveGameState, loadGameState, clearGameState } from '../lib/persistence/gamePersistence'
 import { hydrateGame } from '../features/game/gameSlice'
+import { store } from '../store/store'
 
 const GamePersistenceProvider = ({ children }) => {
     const dispatch = useDispatch()
@@ -15,19 +16,16 @@ const GamePersistenceProvider = ({ children }) => {
         }
     }, [dispatch])
 
-    // Save game state on every change
+    // Save once on unload
     useEffect(() => {
-        if (gameState.gameStarted) {
-            saveGameState(gameState)
+        const handleUnload = () => {
+            const currentGameState = store.getState().game
+            saveGameState(currentGameState)
         }
-    }, [gameState])
 
-    // Optional: auto-clear if game is reset
-    useEffect(() => {
-        if (!gameState.gameStarted) {
-            clearGameState()
-        }
-    }, [gameState.gameStarted])
+        window.addEventListener('beforeunload', handleUnload)
+        return () => window.removeEventListener('beforeunload', handleUnload)
+    }, [])
 
     return children
 }

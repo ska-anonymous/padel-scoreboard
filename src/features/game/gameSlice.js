@@ -1,24 +1,36 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { processPoint as runGameLogic, processDecrement as runDecrement } from '../../services/gameEngine'
 
 const initialState = {
     teamA: {
         players: ['', ''],
-        score: 0,
-        sets: [],
+        points: 0,
+        games: [],
+        setsWon: 0,
     },
     teamB: {
         players: ['', ''],
-        score: 0,
-        sets: [],
+        points: 0,
+        games: [],
+        setsWon: 0,
     },
     currentSet: 0,
+    advantage: null,
+    tiebreakActive: false,
+    matchWinner: null,
     gameStarted: false,
+    scoreHistory: [],
+    elapsedSeconds: 0,
     gameConfig: {
-        setsToWin: 3,
+        setsToWin: 'best_of_3',
         goldenPoint: false,
+        tiebreaker: true,
         timerEnabled: false,
-        endTime: null,
+        timerMinutes: null,
+        gameMode: 'regular',
+        targetPoints: 21
     },
+
 }
 
 const gameSlice = createSlice({
@@ -33,42 +45,57 @@ const gameSlice = createSlice({
         setGameConfig(state, action) {
             state.gameConfig = { ...state.gameConfig, ...action.payload }
         },
-        incrementScore(state, action) {
-            const team = action.payload
-            state[team].score += 1
-        },
-        decrementScore(state, action) {
-            const team = action.payload
-            if (state[team].score > 0) state[team].score -= 1
+        startGame(state) {
+            state.gameStarted = true
+            state.elapsedSeconds = 0
         },
         resetGame(state) {
             Object.assign(state, initialState)
         },
-        startGame(state) {
-            state.gameStarted = true
-        },
         resetScore(state) {
-            state.teamA.score = 0
-            state.teamB.score = 0
-            state.teamA.sets = []
-            state.teamB.sets = []
+            state.teamA.points = 0
+            state.teamB.points = 0
+            state.teamA.games = []
+            state.teamB.games = []
+            state.teamA.setsWon = 0
+            state.teamB.setsWon = 0
             state.currentSet = 0
+            state.advantage = null
+            state.matchWinner = null
+            state.tiebreakActive = false
+            state.scoreHistory = []
+            state.elapsedSeconds = 0
+        },
+        tickTimer(state) {
+            if (state.gameStarted && state.gameConfig.timerEnabled) {
+                state.elapsedSeconds += 1
+            }
         },
         hydrateGame(state, action) {
             return { ...state, ...action.payload }
+        },
+        processPoint(state, action) {
+            const team = action.payload
+            runGameLogic(state, team)
+        },
+        processDecrement(state, action) {
+            const team = action.payload
+            runDecrement(state, team)
         }
+
     },
 })
 
 export const {
     setPlayers,
     setGameConfig,
-    incrementScore,
-    decrementScore,
-    resetGame,
     startGame,
+    resetGame,
     resetScore,
-    hydrateGame
+    hydrateGame,
+    tickTimer,
+    processPoint,
+    processDecrement,
 } = gameSlice.actions
 
 export default gameSlice.reducer

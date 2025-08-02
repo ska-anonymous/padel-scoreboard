@@ -1,20 +1,22 @@
 import { useSelector, useDispatch } from 'react-redux'
 import {
-    incrementScore,
-    decrementScore,
+    processPoint,
+    processDecrement,
     resetGame,
     startGame,
     setPlayers,
     setGameConfig,
-    resetScore
+    resetScore,
 } from '../features/game/gameSlice'
 
-export const useGameEngine = () => {
+export const useGame = () => {
     const dispatch = useDispatch()
     const gameState = useSelector((state) => state.game)
 
-    const increment = (team) => dispatch(incrementScore(team))
-    const decrement = (team) => dispatch(decrementScore(team))
+    // New point handler
+    const increment = (team) => dispatch(processPoint(team))
+    const decrement = (team) => dispatch(processDecrement(team))
+
     const reset = () => dispatch(resetGame())
     const start = () => dispatch(startGame())
     const resetGameScore = () => dispatch(resetScore())
@@ -29,6 +31,6 @@ export const useGameEngine = () => {
         start,
         setPlayerNames,
         updateConfig,
-        resetGameScore
+        resetGameScore,
     }
 }

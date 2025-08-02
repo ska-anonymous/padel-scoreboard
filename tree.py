@@ -15,6 +15,6 @@ def generate_folder_structure(path, exclusions, output_file):
 
 if __name__ == "__main__":
     base_path = r'C:\Users\SKA\Desktop\Scoreboard\react-app'
-    exclusions = ['node_modules']
+    exclusions = ['node_modules', '.git']
     output_file = 'folder_structure1.txt'
     generate_folder_structure(base_path, exclusions, output_file)

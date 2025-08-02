@@ -5,9 +5,10 @@ const GameStartForm = ({ onSubmit }) => {
     const [teamB, setTeamB] = useState(['', ''])
     const [gameMode, setGameMode] = useState('regular')
     const [playStyle, setPlayStyle] = useState('advantage')
-    const [setsToWin, setSetsToWin] = useState('3')
+    const [setsToWin, setSetsToWin] = useState('best_of_3')
     const [timerEnabled, setTimerEnabled] = useState(false)
     const [timerMinutes, setTimerMinutes] = useState('60')
+    const [targetPoints, setTargetPoints] = useState('21')
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -19,6 +20,7 @@ const GameStartForm = ({ onSubmit }) => {
             setsToWin,
             timerEnabled,
             timerMinutes: timerEnabled ? parseInt(timerMinutes, 10) : null,
+            targetPoints: gameMode === 'points' ? parseInt(targetPoints, 10) : null,
         })
     }
 
@@ -71,10 +73,23 @@ const GameStartForm = ({ onSubmit }) => {
             <div className="mb-3">
                 <label className="form-label">Game Mode</label>
                 <select className="form-select" value={gameMode} onChange={(e) => setGameMode(e.target.value)}>
-                    <option value="regular">Regular</option>
-                    <option value="points">Points Game</option>
+                    <option value="regular">Regular (Sets)</option>
+                    <option value="points">Points Game (First to X)</option>
                 </select>
             </div>
+
+            {gameMode === 'points' && (
+                <div className="mb-3">
+                    <label className="form-label">Target Points</label>
+                    <input
+                        type="number"
+                        className="form-control"
+                        value={targetPoints}
+                        onChange={(e) => setTargetPoints(e.target.value)}
+                        min={1}
+                    />
+                </div>
+            )}
 
             <div className="mb-3">
                 <label className="form-label">Play Style</label>
@@ -84,16 +99,18 @@ const GameStartForm = ({ onSubmit }) => {
                 </select>
             </div>
 
-            <div className="mb-3">
-                <label className="form-label">Sets to Win</label>
-                <select className="form-select" value={setsToWin} onChange={(e) => setSetsToWin(e.target.value)}>
-                    <option value="1">1</option>
-                    <option value="3">3</option>
-                    <option value="best_of_3">Best of 3</option>
-                    <option value="best_of_5">Best of 5</option>
-                    <option value="unlimited">Unlimited</option>
-                </select>
-            </div>
+            {gameMode === 'regular' && (
+                <div className="mb-3">
+                    <label className="form-label">Sets to Win</label>
+                    <select className="form-select" value={setsToWin} onChange={(e) => setSetsToWin(e.target.value)}>
+                        <option value="1">1</option>
+                        <option value="3">3</option>
+                        <option value="best_of_3">Best of 3</option>
+                        <option value="best_of_5">Best of 5</option>
+                        <option value="unlimited">Unlimited</option>
+                    </select>
+                </div>
+            )}
 
             <div className="form-check form-switch mb-3">
                 <input
@@ -113,6 +130,7 @@ const GameStartForm = ({ onSubmit }) => {
                         className="form-control"
                         value={timerMinutes}
                         onChange={(e) => setTimerMinutes(e.target.value)}
+                        min={1}
                     />
                 </div>
             )}

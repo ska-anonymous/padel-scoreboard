@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { QRCodeCanvas } from 'qrcode.react'
-import { useGameEngine } from '../hooks/useGameEngine'
+import { useGame } from '../hooks/useGame'
 
 const QRCodePage = () => {
     const navigate = useNavigate()
-    const { gameStarted } = useGameEngine()
+    const { gameStarted } = useGame()
 
     useEffect(() => {
         if (gameStarted) {

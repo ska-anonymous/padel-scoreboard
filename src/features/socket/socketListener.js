@@ -5,13 +5,13 @@ import {
     setGameConfig,
     resetGame,
     startGame,
-    incrementScore,
-    decrementScore,
     resetScore,
-    hydrateGame
+    hydrateGame,
+    processPoint,
+    processDecrement,
 } from '../game/gameSlice'
 
-import { clearGameState, saveGameState } from '../../lib/persistence/gamePersistence'
+import { clearGameState } from '../../lib/persistence/gamePersistence'
 import { sendSyncState } from './socketActions'
 import { getSynced, setSynced } from '../../lib/syncStatus'
 
@@ -31,11 +31,11 @@ export const registerSocketListeners = ({ dispatch, getState }) => {
     })
 
     onSocketEvent(SOCKET_EVENTS.SCORE_INCREMENT, (team) => {
-        dispatch(incrementScore(team))
+        dispatch(processPoint(team))
     })
 
     onSocketEvent(SOCKET_EVENTS.SCORE_DECREMENT, (team) => {
-        dispatch(decrementScore(team))
+        dispatch(processDecrement(team))
     })
 
     onSocketEvent(SOCKET_EVENTS.CLEAR_PERSISTED_STATE, () => {
@@ -50,12 +50,11 @@ export const registerSocketListeners = ({ dispatch, getState }) => {
 
     // 🆕 Handle sync state update
     onSocketEvent(SOCKET_EVENTS.SYNC_STATE, (state) => {
-        if (getSynced()) return // ignore duplicate/unrequested syncs
+        if (getSynced()) return
 
         dispatch(hydrateGame(state))
-        saveGameState(state)
         setSynced(true)
-
     })
+
 
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useGameEngine } from '../hooks/useGameEngine'
+import { useGame } from '../hooks/useGame'
 import GameStartForm from '../components/admin/GameStartForm'
 import AdminControls from '../components/admin/AdminControls'
 import {
@@ -11,6 +11,7 @@ import {
     sendClearPersistedState,
 } from '../features/socket/socketActions'
 import { clearGameState } from '../lib/persistence/gamePersistence'
+import useTTS from '../hooks/useTTS'
 
 const AdminPage = () => {
     const {
@@ -22,31 +23,40 @@ const AdminPage = () => {
         setPlayerNames,
         updateConfig,
         resetGameScore
-    } = useGameEngine()
+    } = useGame()
 
-    const handleNewGameSubmit = (config) => {
-        // 1. Locally update Redux state
-        setPlayerNames(config.teamA, config.teamB)
-        updateConfig(config)
+    const { speak } = useTTS()
+
+    const handleNewGameSubmit = (formConfig) => {
+        const normalized = {
+            ...formConfig,
+            goldenPoint: formConfig.playStyle === 'golden',
+            timerMinutes: formConfig.timerEnabled ? formConfig.timerMinutes : null,
+            targetPoints: formConfig.gameMode === 'points' ? formConfig.targetPoints : null,
+            // Optional: default tiebreaker to true unless changed later
+            tiebreaker: true
+        }
+
+        setPlayerNames(normalized.teamA, normalized.teamB)
+        updateConfig(normalized)
         start()
-
-        // 2. Emit over socket (centralized)
-        sendGameStart(config)
+        sendGameStart(normalized)
     }
+
+
 
     const handleNewGame = () => {
         const confirm = window.confirm('Do you really want to start a new game?')
-        if (!confirm) return;
-        // Reset Redux state
-        reset() //reset state locally
-        sendGameReset()             // Broadcast to others
-        clearGameState()            // Clear local storage
-        sendClearPersistedState()   // Tell others to clear theirs
+        if (!confirm) return
+        reset()
+        sendGameReset()
+        clearGameState()
+        sendClearPersistedState()
     }
 
     const handleResetScore = () => {
         const confirm = window.confirm('Do you want to reset score?')
-        if (!confirm) return;
+        if (!confirm) return
         resetGameScore()
         sendScoreReset()
     }
@@ -56,7 +66,7 @@ const AdminPage = () => {
             {gameStarted ? (
                 <AdminControls
                     onResetScore={handleResetScore}
-                    onNewGame={handleNewGame} // Or show a reset confirmation later
+                    onNewGame={handleNewGame}
                     onIncrement={(team) => {
                         increment(team)
                         sendScoreIncrement(team)
