@@ -1,13 +1,65 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite + React</title>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script>
+    (function () {
+      var errorDiv = document.createElement('div');
+      errorDiv.setAttribute('id', 'error-display');
+      errorDiv.style.position = 'fixed';
+      errorDiv.style.top = '0';
+      errorDiv.style.left = '0';
+      errorDiv.style.width = '100%';
+      errorDiv.style.maxHeight = '50vh';
+      errorDiv.style.overflowY = 'auto';
+      errorDiv.style.backgroundColor = 'black';
+      errorDiv.style.color = 'red';
+      errorDiv.style.fontSize = '14px';
+      errorDiv.style.padding = '10px';
+      errorDiv.style.zIndex = '9999';
+      errorDiv.style.fontFamily = 'monospace';
+      document.body.insertBefore(errorDiv, document.body.firstChild);
+
+      function appendError(msg) {
+        var pre = document.createElement('pre');
+        pre.textContent = msg;
+        errorDiv.appendChild(pre);
+      }
+
+      window.onerror = function (message, source, lineno, colno, error) {
+        var msg = '⚠️ JS Error: ' + message + '\n';
+        if (source) msg += 'Source: ' + source + '\n';
+        if (lineno != null) msg += 'Line: ' + lineno + ', Col: ' + colno + '\n';
+        if (error && error.stack) msg += 'Stack:\n' + error.stack + '\n';
+        msg += '-----------------------------';
+        appendError(msg);
+      };
+
+      window.onunhandledrejection = function (event) {
+        var reason = event.reason;
+        var msg = '⚠️ Unhandled Promise Rejection: ';
+        if (reason && reason.message) {
+          msg += reason.message + '\n';
+          if (reason.stack) msg += 'Stack:\n' + reason.stack + '\n';
+        } else {
+          msg += String(reason) + '\n';
+        }
+        msg += '-----------------------------';
+        appendError(msg);
+      };
+    })();
+  </script>
+
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>
