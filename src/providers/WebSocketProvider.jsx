@@ -4,13 +4,20 @@ import { connectSocket } from '../services/socketService'
 import { registerSocketListeners } from '../features/socket/socketListener'
 
 import { store } from '../store/store'
+import { getSocketURL } from '../lib/utils'
 
-const socketURL = 'wss://10.31.104.24:8080/ws'
 
 const WebSocketProvider = ({ children }) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
+        const socketURL = getSocketURL()
+
+        if (!socketURL) {
+            console.warn('[WebSocket] No socket URL defined. Skipping connection.')
+            return
+        }
+
         connectSocket(socketURL)
         registerSocketListeners(store)
     }, [])
