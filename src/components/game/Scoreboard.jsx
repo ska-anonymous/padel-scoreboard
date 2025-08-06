@@ -73,14 +73,16 @@ const Scoreboard = ({ gameState }) => {
                                     className="text-success fw-bold"
                                     style={{ fontSize: '1rem', marginBottom: '0.25rem' }}
                                 >
-                                    {winner === 'teamA'
-                                        ? `${'Team A'}`
-                                        : `${'Team B'}`}
+                                    <span className='bg-light p-1 rounded text-success'>
+                                        {winner === 'teamA'
+                                            ? `${'Team A'}`
+                                            : `${'Team B'}`}
+                                    </span>
                                 </div>
                             )}
                             {/* Set Label */}
                             <div
-                                className={`text-secondary text-uppercase fw-semibold fs-5 ${isCurrent ? 'text-warning' : ''
+                                className={`text-secondary text-uppercase fs-set-label ${isCurrent ? 'text-warning' : 'text-secondary'
                                     }`}
                             >
                                 Set {index + 1}
@@ -100,7 +102,7 @@ const Scoreboard = ({ gameState }) => {
             return (
                 <div
                     key={index}
-                    className={`col text-center fw-bold fs-1 ${isCurrent ? 'border border-3 border-warning rounded' : ''
+                    className={`col text-center fs-set-score ${isCurrent ? 'border border-3 border-warning rounded' : ''
                         }`}
                 >
                     {team.games?.[index] ?? 0}
@@ -120,9 +122,9 @@ const Scoreboard = ({ gameState }) => {
 
                 {/* Title */}
                 <div className="col text-center">
-                    <h2 className="fw-bold fs-1 mb-0 text-warning">PADEL SCORE BOARD</h2>
+                    <h2 className="fs-title mb-0 text-warning">PADEL SCORE BOARD</h2>
                     {matchWinner && (
-                        <div className="text-light bg-success fw-bold fs-2 mt-1">
+                        <div className="text-light bg-success fs-winner mt-1">
                             🏆 Match Winner: {matchWinner === 'teamA' ? 'Team A' : 'Team B'}
                         </div>
                     )}
@@ -140,12 +142,12 @@ const Scoreboard = ({ gameState }) => {
             {/* Team A */}
             <div className="row py-3 align-items-center">
                 <div className="col-12 col-md-3 text-start">
-                    <div className="fs-1 fw-bold">{teamA.players?.[0] || 'Player 1'}</div>
-                    <div className="fs-1 fw-bold">{teamA.players?.[1] || 'Player 2'}</div>
+                    <div className="fs-player-name">{teamA.players?.[0] || 'Player 1'}</div>
+                    <div className="fs-player-name">{teamA.players?.[1] || 'Player 2'}</div>
                 </div>
                 <div className="col d-flex">{renderSetScores(teamA)}</div>
                 <div className="col-auto text-end">
-                    <div className="border border-light px-3 py-1 bg-white text-dark fs-1 fw-bold rounded">
+                    <div className="fs-points border border-light px-3 py-1 bg-white text-dark rounded">
                         {teamA.points ?? 0}
                     </div>
                 </div>
@@ -157,12 +159,12 @@ const Scoreboard = ({ gameState }) => {
             {/* Team B */}
             <div className="row py-3 align-items-center">
                 <div className="col-12 col-md-3 text-start">
-                    <div className="fs-1 fw-bold">{teamB.players?.[0] || 'Player 3'}</div>
-                    <div className="fs-1 fw-bold">{teamB.players?.[1] || 'Player 4'}</div>
+                    <div className="fs-player-name">{teamB.players?.[0] || 'Player 3'}</div>
+                    <div className="fs-player-name">{teamB.players?.[1] || 'Player 4'}</div>
                 </div>
                 <div className="col d-flex">{renderSetScores(teamB)}</div>
                 <div className="col-auto text-end">
-                    <div className="border border-light px-3 py-1 bg-white text-dark fs-1 fw-bold rounded">
+                    <div className="fs-points border border-light px-3 py-1 bg-white text-dark rounded">
                         {teamB.points ?? 0}
                     </div>
                 </div>

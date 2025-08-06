@@ -5,7 +5,7 @@ import { registerSocketListeners } from '../features/socket/socketListener'
 
 import { store } from '../store/store'
 
-const socketURL = 'ws://10.31.104.24:8080/ws'
+const socketURL = 'wss://10.31.104.24:8080/ws'
 
 const WebSocketProvider = ({ children }) => {
     const dispatch = useDispatch()

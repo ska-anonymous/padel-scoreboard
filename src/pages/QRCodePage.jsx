@@ -16,7 +16,7 @@ const QRCodePage = () => {
     const adminURL = window.location.origin + '/admin'
 
     return (
-        <div className="container d-flex flex-column align-items-center justify-content-center text-white min-vh-100 text-center py-4">
+        <div className="container d-flex flex-column align-items-center justify-content-center text-white text-center py-4">
             <h1 className="display-5 mb-4">No game running</h1>
             <p className="lead mb-3">Scan the QR code below to open the Admin Panel and start a new game.</p>
 

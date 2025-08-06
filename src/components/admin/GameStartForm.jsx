@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
 const GameStartForm = ({ onSubmit }) => {
-    const [teamA, setTeamA] = useState(['', ''])
-    const [teamB, setTeamB] = useState(['', ''])
+    const [teamA, setTeamA] = useState(['Player 1', 'Player 2'])
+    const [teamB, setTeamB] = useState(['Player 3', 'Player 4'])
     const [gameMode, setGameMode] = useState('regular')
     const [playStyle, setPlayStyle] = useState('advantage')
     const [setsToWin, setSetsToWin] = useState('best_of_3')
