@@ -1,0 +1,40 @@
+.bg-game-gradient {
+  background: linear-gradient(135deg, #0f172a, #2a003f);
+}
+
+/* For set and match points */
+.fs-points {
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  font-weight: bold;
+}
+
+/* For player names */
+.fs-player-name {
+  font-size: clamp(2.2rem, 5vw, 3rem);
+  font-weight: bold;
+}
+
+/* For set scores */
+.fs-set-score {
+  font-size: clamp(2.5rem, 5.5vw, 3.5rem);
+  font-weight: bold;
+}
+
+/* For set labels like "Set 1" */
+.fs-set-label {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* For the "Match Winner" banner */
+.fs-winner {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: bold;
+}
+
+/* For the scoreboard title */
+.fs-title {
+  font-size: clamp(2.5rem, 6vw, 3.25rem);
+  font-weight: bold;
+}

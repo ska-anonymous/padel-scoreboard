@@ -1,0 +1,66 @@
+# =========================
+# Logs
+# =========================
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# =========================
+# Node.js projects (React app, websocket server, etc.)
+# =========================
+**/node_modules/
+**/dist/
+**/dist-ssr/
+*.local
+
+# =========================
+# ESP32 (Arduino / PlatformIO)
+# =========================
+# Build artifacts
+ScoreboardESP/.pio/
+ScoreboardESP/build/
+ScoreboardESP/.vscode/
+# SPIFFS/LittleFS upload data (generated React build)
+ScoreboardESP/data/
+
+# =========================
+# Environment / Config
+# =========================
+**/.env
+**/.env.local
+**/.env.*.local
+
+# =========================
+# Editor / IDE
+# =========================
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# =========================
+# OS junk
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Project-specific
+# =========================
+# Docs are kept under version control (useful for you).
+# Uncomment if you later want to ignore them:
+# docs/**/*.docx
+# docs/**/*.pdf
+# docs/images/
+
+# Python helper scripts cache
+__pycache__/
+*.pyc
