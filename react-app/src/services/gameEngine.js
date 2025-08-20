@@ -1,3 +1,4 @@
+// src/services/gameEngine.js
 // Helpers
 const POINT_SEQUENCE = [0, 15, 30, 40];
 
@@ -28,7 +29,6 @@ function ensureSetInitialized(state) {
 }
 
 function rotateServerOnGameEnd(state) {
-  // Run only if you already track serving
   if (!state.serving) return;
   if (Array.isArray(state.serving.order) && typeof state.serving.index === 'number') {
     state.serving.index = (state.serving.index + 1) % state.serving.order.length;

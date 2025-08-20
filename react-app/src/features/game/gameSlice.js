@@ -15,6 +15,11 @@ const initialState = {
         games: [],
         setsWon: 0,
     },
+    serving: {
+        order: [], // [{ team:'teamA', idx:0 }, { team:'teamB', idx:0 }, { team:'teamA', idx:1 }, { team:'teamB', idx:1 }]
+        index: 0,        // pointer in order
+        current: null,   // mirror of order[index]
+    },
     currentSet: 0,
     advantage: null,
     tiebreakActive: false,
@@ -41,6 +46,15 @@ const gameSlice = createSlice({
             const { teamA, teamB } = action.payload
             state.teamA.players = teamA
             state.teamB.players = teamB
+
+            state.serving.order = [
+                { team: 'teamA', idx: 0 }, // player 1
+                { team: 'teamB', idx: 0 }, // player 3
+                { team: 'teamA', idx: 1 }, // player 2
+                { team: 'teamB', idx: 1 }, // player 4
+            ]
+            state.serving.index = 0
+            state.serving.current = state.serving.order[0]
         },
         setGameConfig(state, action) {
             state.gameConfig = { ...state.gameConfig, ...action.payload }
@@ -48,6 +62,12 @@ const gameSlice = createSlice({
         startGame(state) {
             state.gameStarted = true
             state.elapsedSeconds = 0
+
+            // ensure serving current is set if players were set earlier
+            if (!state.serving.current && state.serving.order?.length) {
+                state.serving.index = 0
+                state.serving.current = state.serving.order[0]
+            }
         },
         resetGame(state) {
             Object.assign(state, initialState)
@@ -64,8 +84,9 @@ const gameSlice = createSlice({
             state.matchWinner = null
             state.tiebreakActive = false
             state.setDeciderActive = false     // <-- ensure cleared
-            state.scoreHistory = []            // (harmless if you still use it elsewhere)
             state.elapsedSeconds = 0
+            // reset serving state on full score reset
+            state.serving = { order: [], index: 0, current: null }
         },
         tickTimer(state) {
             if (state.gameStarted && state.gameConfig.timerEnabled) {
@@ -82,7 +103,16 @@ const gameSlice = createSlice({
         processDecrement(state, action) {
             const team = action.payload
             runDecrement(state, team)
-        }
+        },
+        // >>> ADDED: optional control to pick a different starting server (0..3)
+        setStartingServer(state, action) {
+            const idx = Number(action.payload) || 0
+            if (state.serving.order?.length) {
+                const len = state.serving.order.length
+                state.serving.index = ((idx % len) + len) % len
+                state.serving.current = state.serving.order[state.serving.index]
+            }
+        },
     },
 })
 
@@ -96,6 +126,7 @@ export const {
     tickTimer,
     processPoint,
     processDecrement,
+    setStartingServer,
 } = gameSlice.actions
 
 export default gameSlice.reducer

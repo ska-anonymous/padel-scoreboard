@@ -12,6 +12,7 @@ const Scoreboard = ({ gameState }) => {
         setDeciderActive,
         advantage,
         elapsedSeconds,
+        serving,
     } = gameState
 
     const {
@@ -27,6 +28,9 @@ const Scoreboard = ({ gameState }) => {
     const { label: timerLabel } = useTimerDisplay(elapsedSeconds, timerMinutes)
 
     // --- helpers ---------------------------------------------------------------
+
+    const isServing = (teamKey, playerIdx) =>
+        serving?.current?.team === teamKey && serving?.current?.idx === playerIdx
 
     const getSetCount = (setsToWin, teamA, teamB, currentSet) => {
         switch (setsToWin) {
@@ -226,8 +230,14 @@ const Scoreboard = ({ gameState }) => {
             {/* Team A Row */}
             <div className="row py-3 align-items-center">
                 <div className="col-12 col-md-3 text-start">
-                    <div className="fs-player-name">{teamA.players?.[0] || 'Player 1'}</div>
-                    <div className="fs-player-name">{teamA.players?.[1] || 'Player 2'}</div>
+                    <div className="fs-player-name">
+                        {teamA.players?.[0] || 'Player 1'}
+                        {isServing('teamA', 0) && <span className="me-1" aria-label="server">🎾</span>}
+                    </div>
+                    <div className="fs-player-name">
+                        {teamA.players?.[1] || 'Player 2'}
+                        {isServing('teamA', 1) && <span className="me-1" aria-label="server">🎾</span>}
+                    </div>
                 </div>
 
                 <div className="col d-flex">{renderSetScores(teamA)}</div>
@@ -249,8 +259,14 @@ const Scoreboard = ({ gameState }) => {
             {/* Team B Row */}
             <div className="row py-3 align-items-center">
                 <div className="col-12 col-md-3 text-start">
-                    <div className="fs-player-name">{teamB.players?.[0] || 'Player 3'}</div>
-                    <div className="fs-player-name">{teamB.players?.[1] || 'Player 4'}</div>
+                    <div className="fs-player-name">
+                        {teamB.players?.[0] || 'Player 3'}
+                        {isServing('teamB', 0) && <span className="me-1" aria-label="server">🎾</span>}
+                    </div>
+                    <div className="fs-player-name">
+                        {teamB.players?.[1] || 'Player 4'}
+                        {isServing('teamB', 1) && <span className="me-1" aria-label="server">🎾</span>}
+                    </div>
                 </div>
 
                 <div className="col d-flex">{renderSetScores(teamB)}</div>
